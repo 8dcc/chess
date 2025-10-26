@@ -1,0 +1,70 @@
+/*
+ * Copyright 2025 8dcc
+ *
+ * This file is part of 8dcc's Chess.
+ *
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOARD_H_
+#define BOARD_H_ 1
+
+#include <stddef.h>
+#include <stdbool.h>
+
+#include "piece.h"
+
+typedef struct BoardCell {
+    bool has_piece;
+    Piece piece;
+} BoardCell;
+
+/*
+ * Structure representing a chess board, containing the current information
+ * about all (alive) pieces.
+ */
+typedef struct Board {
+    size_t width, height;
+    BoardCell* cells;
+} Board;
+
+/*----------------------------------------------------------------------------*/
+
+/*
+ * Initialize a 'Board' structure with the specified width and height. After
+ * successfuly calling this function, the caller is responsible for
+ * deinitializing it with 'board_destroy'.
+ *
+ * This function returns true on success, or false on error.
+ */
+bool board_init(Board* board, size_t width, size_t height);
+
+/*
+ * Deinitialize a 'Board' structure, freeing the relevant members. It doesn't
+ * free the argument pointer itself.
+ */
+void board_destroy(Board* board);
+
+/*
+ * Set the initial layout of a chess board.
+ */
+bool board_set_initial_layout(Board* board);
+
+/*
+ * Get the character used to display a cell of a chess board.
+ */
+static inline char board_cell_get_char(BoardCell* cell) {
+    return cell->has_piece ? piece_get_char(&cell->piece) : ' ';
+}
+
+#endif /* BOARD_H_ */
