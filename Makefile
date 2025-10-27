@@ -1,9 +1,9 @@
 
 CC     := gcc
 CFLAGS := -std=c99 -Wall -Wextra -Wpedantic -Wshadow# -ggdb3 -fsanitize=address,leak,undefined -fstack-protector-strong
-LDLIBS :=
+LDLIBS := -lncurses
 
-SRC := main.c board.c
+SRC := main.c board.c render.c input.c
 OBJ := $(addprefix obj/, $(addsuffix .o, $(SRC)))
 
 BIN := chess-ncurses

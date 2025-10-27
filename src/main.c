@@ -19,11 +19,10 @@
 #include <stdio.h>
 
 #include "include/board.h"
+#include "include/render.h"
+#include "include/input.h"
 
-int main(int argc, char** argv) {
-    (void)argc;
-    (void)argv;
-
+int main(void) {
     const size_t board_width  = 8;
     const size_t board_height = 8;
 
@@ -37,19 +36,32 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    /* TODO: Render board using ncurses, etc. */
-    for (size_t x = 0; x < board.width; x++)
-        printf("+---");
-    printf("+\n");
-    for (size_t y = 0; y < board.height; y++) {
-        for (size_t x = 0; x < board.width; x++)
-            printf("| %c ", board_cell_get_char(&board.cells[board.width * y + x]));
-        printf("|\n");
-        for (size_t x = 0; x < board.width; x++)
-            printf("+---");
-        printf("+\n");
+    if (!render_startup()) {
+        fprintf(stderr, "Failed to start rendering.\n");
+        goto cleanup;
     }
 
+    /* TODO: Render board using ncurses, etc. */
+    bool should_quit = false;
+    while (!should_quit) {
+        if (!render_board(&board)) {
+            fprintf(stderr, "Failed to render board. Aborting...\n");
+            break;
+        }
+
+        /* Handle user input */
+        switch (input_get_key()) {
+            case INPUT_KEY_QUIT:
+                should_quit = true;
+                break;
+
+            case INPUT_KEY_UNKNOWN:
+                break;
+        }
+    }
+
+cleanup:
+    render_cleanup();
     board_destroy(&board);
     return 0;
 }
