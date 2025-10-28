@@ -34,8 +34,14 @@ typedef struct BoardCell {
  * about all (alive) pieces.
  */
 typedef struct Board {
+    /* Width and height of the board, in cells */
     size_t width, height;
+
+    /* Array of board cells */
     BoardCell* cells;
+
+    /* Position of the player cursor, in cells */
+    size_t cursor_x, cursor_y;
 } Board;
 
 /*----------------------------------------------------------------------------*/

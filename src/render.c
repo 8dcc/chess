@@ -23,6 +23,7 @@
 #include <curses.h>
 
 #include "include/board.h"
+#include "include/util.h"
 
 #define MARGIN_X 2 /* characters */
 #define MARGIN_Y 1 /* characters */
@@ -93,6 +94,10 @@ bool render_board(const Board* board) {
             addstr("+---");
         addch('+');
     }
+
+    /* After rendering, move terminal cursor to the player cursor */
+    move(MARGIN_Y + (STRLEN("+|") * board->cursor_y) + 1,
+         MARGIN_X + (STRLEN("+---") * board->cursor_x) + 2);
 
     refresh();
     return true;
