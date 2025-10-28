@@ -24,7 +24,8 @@
 
 #include "include/board.h"
 
-#define MARGIN 2 /* characters */
+#define MARGIN_X 2 /* characters */
+#define MARGIN_Y 1 /* characters */
 
 static bool addfmt(const char* fmt, ...) {
     va_list va;
@@ -69,7 +70,7 @@ void render_cleanup(void) {
 }
 
 bool render_board(const Board* board) {
-    move(MARGIN, MARGIN);
+    move(MARGIN_Y, MARGIN_X);
 
     /* Initial border */
     for (size_t x = 0; x < board->width; x++)
@@ -77,7 +78,7 @@ bool render_board(const Board* board) {
     addch('+');
 
     for (size_t y = 0; y < board->height; y++) {
-        move(MARGIN + 1 + (y * 2), MARGIN);
+        move(MARGIN_Y + 1 + (y * 2), MARGIN_X);
         /* Row pieces */
         for (size_t x = 0; x < board->width; x++)
             if (!addfmt("| %c ",
@@ -87,7 +88,7 @@ bool render_board(const Board* board) {
         addch('|');
 
         /* Border after each row */
-        move(MARGIN + 1 + (y * 2) + 1, MARGIN);
+        move(MARGIN_Y + 1 + (y * 2) + 1, MARGIN_X);
         for (size_t x = 0; x < board->width; x++)
             addstr("+---");
         addch('+');
