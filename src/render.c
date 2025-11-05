@@ -38,7 +38,7 @@ static bool addfmt(const char* fmt, ...) {
     if (data_size < 0)
         return false;
 
-    char* buffer = malloc(data_size);
+    char* buffer = malloc(data_size + 1);
     if (buffer == NULL)
         return false;
 
