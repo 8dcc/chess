@@ -19,6 +19,9 @@
 #ifndef INPUT_H_
 #define INPUT_H_ 1
 
+/*
+ * Enumeration representing possible user inputs.
+ */
 enum EInputKey {
     INPUT_KEY_UNKNOWN,
     INPUT_KEY_QUIT,
@@ -26,6 +29,9 @@ enum EInputKey {
 
 /*----------------------------------------------------------------------------*/
 
+/*
+ * Read an input key from the user, and return it.
+ */
 enum EInputKey input_get_key(void);
 
 #endif /* INPUT_H_ */

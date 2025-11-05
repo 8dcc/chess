@@ -41,7 +41,6 @@ int main(void) {
         goto cleanup;
     }
 
-    /* TODO: Render board using ncurses, etc. */
     bool should_quit = false;
     while (!should_quit) {
         if (!render_board(&board)) {
