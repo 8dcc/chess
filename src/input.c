@@ -27,8 +27,22 @@
  */
 #define KEY_CTRLC 3
 
+/*----------------------------------------------------------------------------*/
+
+/*
+ * Get a key input from the user, and return it.
+ *
+ * This function could be modified (even at compile-time) to support multiple
+ * input methods.
+ */
+static inline int get_user_char(void) {
+    return getch();
+}
+
+/*----------------------------------------------------------------------------*/
+
 enum EInputKey input_get_key(void) {
-    switch (tolower(getch())) {
+    switch (tolower(get_user_char())) {
         case 'q':
         case KEY_CTRLC:
             return INPUT_KEY_QUIT;
