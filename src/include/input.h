@@ -19,12 +19,20 @@
 #ifndef INPUT_H_
 #define INPUT_H_ 1
 
+#include <stdbool.h>
+
+#include "board.h"
+
 /*
  * Enumeration representing possible user inputs.
  */
 enum EInputKey {
     INPUT_KEY_UNKNOWN,
     INPUT_KEY_QUIT,
+    INPUT_KEY_UP,
+    INPUT_KEY_DOWN,
+    INPUT_KEY_LEFT,
+    INPUT_KEY_RIGHT,
 };
 
 /*----------------------------------------------------------------------------*/
@@ -33,5 +41,16 @@ enum EInputKey {
  * Read an input key from the user, and return it.
  */
 enum EInputKey input_get_key(void);
+
+/*
+ * Process a game key, altering the specified chess board if needed. Keys
+ * unrelated to the game are not processed, so the caller is responsible for
+ * the other application-level keys.
+ *
+ * This function returns true if the key was successfully processed, or false in
+ * case of error (e.g. it's not a game key, or there was an error processing a
+ * valid key).
+ */
+bool input_process_game_key(Board* board, enum EInputKey input_key);
 
 #endif /* INPUT_H_ */

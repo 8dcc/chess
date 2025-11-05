@@ -48,15 +48,16 @@ int main(void) {
             break;
         }
 
-        /* Handle user input */
-        switch (input_get_key()) {
-            case INPUT_KEY_QUIT:
-                should_quit = true;
-                break;
+        const enum EInputKey input_key = input_get_key();
 
-            case INPUT_KEY_UNKNOWN:
-                break;
+        /* Process application-level user input */
+        if (input_key == INPUT_KEY_QUIT) {
+            should_quit = true;
+            continue;
         }
+
+        /* Process game-level user input */
+        input_process_game_key(&board, input_key);
     }
 
 cleanup:

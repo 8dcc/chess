@@ -17,10 +17,12 @@
  */
 
 #include <ctype.h>
+#include <stdbool.h>
 
 #include <curses.h>
 
 #include "include/input.h"
+#include "include/board.h"
 
 /*
  * Key received by 'getch' when the user presses Ctrl+C.
@@ -46,7 +48,53 @@ enum EInputKey input_get_key(void) {
         case 'q':
         case KEY_CTRLC:
             return INPUT_KEY_QUIT;
+
+        case 'k':
+        case KEY_UP:
+            return INPUT_KEY_UP;
+
+        case 'j':
+        case KEY_DOWN:
+            return INPUT_KEY_DOWN;
+
+        case 'h':
+        case KEY_LEFT:
+            return INPUT_KEY_LEFT;
+
+        case 'l':
+        case KEY_RIGHT:
+            return INPUT_KEY_RIGHT;
+
         default:
             return INPUT_KEY_UNKNOWN;
     }
+}
+
+bool input_process_game_key(Board* board, enum EInputKey input_key) {
+    switch (input_key) {
+        case INPUT_KEY_UP:
+            if (board->cursor_y > 0)
+                board->cursor_y--;
+            break;
+
+        case INPUT_KEY_DOWN:
+            if (board->cursor_y < board->height - 1)
+                board->cursor_y++;
+            break;
+
+        case INPUT_KEY_LEFT:
+            if (board->cursor_x > 0)
+                board->cursor_x--;
+            break;
+
+        case INPUT_KEY_RIGHT:
+            if (board->cursor_x < board->width - 1)
+                board->cursor_x++;
+            break;
+
+        default:
+            return false;
+    }
+
+    return true;
 }
