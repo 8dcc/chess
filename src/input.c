@@ -70,6 +70,10 @@ enum EInputKey input_get_key(void) {
     }
 }
 
+/*
+ * TODO: Perhaps this function should be moved to a separate module, and keep
+ * the processing outside of the 'input' module.
+ */
 bool input_process_game_key(Board* board, enum EInputKey input_key) {
     switch (input_key) {
         case INPUT_KEY_UP:

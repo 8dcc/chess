@@ -24,6 +24,10 @@
 
 #include "piece.h"
 
+/*
+ * Structure representing a single cell of a chess board, independently on
+ * whether or not it has a piece on it.
+ */
 typedef struct BoardCell {
     bool has_piece;
     Piece piece;

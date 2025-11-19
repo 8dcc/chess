@@ -43,11 +43,13 @@ int main(void) {
 
     bool should_quit = false;
     while (!should_quit) {
+        /* Render the board to the default backend */
         if (!render_board(&board)) {
             fprintf(stderr, "Failed to render board. Aborting...\n");
             break;
         }
 
+        /* Get the next user input key as an enumeration */
         const enum EInputKey input_key = input_get_key();
 
         /* Process application-level user input */
