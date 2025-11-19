@@ -21,6 +21,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <assert.h>
 
 #include "piece.h"
 
@@ -75,6 +76,16 @@ bool board_set_initial_layout(Board* board);
  */
 static inline char board_cell_get_char(BoardCell* cell) {
     return cell->has_piece ? piece_get_char(&cell->piece) : ' ';
+}
+
+/*
+ * Assert the integrity of a 'Board' structure, ensuring all of the members are
+ * valid and compatible with each other.
+ */
+static inline void board_assert_integrity(const Board* board) {
+    /* The cursor coordinates should not be out of range */
+    assert(board->cursor_x >= 0 && board->cursor_x < board->width &&
+           board->cursor_y >= 0 && board->cursor_y < board->height);
 }
 
 #endif /* BOARD_H_ */

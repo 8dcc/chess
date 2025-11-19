@@ -43,6 +43,12 @@ int main(void) {
 
     bool should_quit = false;
     while (!should_quit) {
+        /*
+         * TODO: Perhaps this should be called from multiple places, similarly
+         * to common parameter assertion?
+         */
+        board_assert_integrity(&board);
+
         /* Render the board to the default backend */
         if (!render_board(&board)) {
             fprintf(stderr, "Failed to render board. Aborting...\n");
