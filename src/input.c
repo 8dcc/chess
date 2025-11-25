@@ -65,6 +65,10 @@ enum EInputKey input_get_key(void) {
         case KEY_RIGHT:
             return INPUT_KEY_RIGHT;
 
+        case ' ':
+        case KEY_ENTER:
+            return INPUT_KEY_SELECT;
+
         default:
             return INPUT_KEY_UNKNOWN;
     }
@@ -94,6 +98,17 @@ bool input_process_game_key(Board* board, enum EInputKey input_key) {
         case INPUT_KEY_RIGHT:
             if (board->cursor_x < board->width - 1)
                 board->cursor_x++;
+            break;
+
+        case INPUT_KEY_SELECT:
+            if (board->selection_x == BOARD_NONSELECTED_IDX &&
+                board->selection_y == BOARD_NONSELECTED_IDX) {
+                board->selection_x = board->cursor_x;
+                board->selection_y = board->cursor_y;
+            } else {
+                board->selection_x = BOARD_NONSELECTED_IDX;
+                board->selection_y = BOARD_NONSELECTED_IDX;
+            }
             break;
 
         default:

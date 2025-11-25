@@ -38,6 +38,7 @@ enum ERenderColors {
     RENDER_COL_DEFAULT,
     RENDER_COL_PIECE,
     RENDER_COL_BORDER,
+    RENDER_COL_SELECTION,
 
     NUM_RENDER_COLORS, /* Must be last */
 };
@@ -66,7 +67,7 @@ static const ColorInfo g_render_colors[] = {
       .background = COLOR_BLACK,
     },
     [RENDER_COL_PIECE] = {
-      .is_bold    = true,
+      .is_bold    = false,
       .is_dim     = false,
       .foreground = COLOR_WHITE,
       .background = COLOR_BLACK,
@@ -74,7 +75,13 @@ static const ColorInfo g_render_colors[] = {
     [RENDER_COL_BORDER] = {
       .is_bold    = false,
       .is_dim     = true,
-      .foreground = COLOR_WHITE,
+      .foreground = 8, /* Gray */
+      .background = COLOR_BLACK,
+    },
+    [RENDER_COL_SELECTION] = {
+      .is_bold    = true,
+      .is_dim     = false,
+      .foreground = COLOR_CYAN,
       .background = COLOR_BLACK,
     },
 };
@@ -217,7 +224,15 @@ bool render_board(const Board* board) {
             if (!addfmt_colored(RENDER_COL_BORDER, "| "))
                 return false;
 
-            if (!addfmt_colored(RENDER_COL_PIECE,
+            const enum ERenderColors piece_color =
+              (board->selection_x != BOARD_NONSELECTED_IDX &&
+               board->selection_y != BOARD_NONSELECTED_IDX &&
+               x == (unsigned int)board->selection_x &&
+               y == (unsigned int)board->selection_y)
+                ? RENDER_COL_SELECTION
+                : RENDER_COL_PIECE;
+
+            if (!addfmt_colored(piece_color,
                                 "%c",
                                 board_cell_get_char(
                                   &board->cells[board->width * y + x])))

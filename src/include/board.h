@@ -26,6 +26,12 @@
 #include "piece.h"
 
 /*
+ * Index value used in 'Board.selection_x' and 'Board.selection_y' to specify
+ * that there is no selected cell in the board.
+ */
+#define BOARD_NONSELECTED_IDX (-1)
+
+/*
  * Structure representing a single cell of a chess board, independently on
  * whether or not it has a piece on it.
  */
@@ -40,13 +46,16 @@ typedef struct BoardCell {
  */
 typedef struct Board {
     /* Width and height of the board, in cells */
-    size_t width, height;
+    unsigned int width, height;
 
     /* Array of board cells */
     BoardCell* cells;
 
     /* Position of the player cursor, in cells */
-    size_t cursor_x, cursor_y;
+    unsigned int cursor_x, cursor_y;
+
+    /* Position of the player selection, in cells */
+    int selection_x, selection_y;
 } Board;
 
 /*----------------------------------------------------------------------------*/
@@ -85,6 +94,20 @@ static inline char board_cell_get_char(BoardCell* cell) {
 static inline void board_assert_integrity(const Board* board) {
     /* The cursor coordinates should not be out of range */
     assert(board->cursor_x < board->width && board->cursor_y < board->height);
+
+    /* The selection coordinates should not be out of range */
+    assert((board->selection_x == BOARD_NONSELECTED_IDX ||
+            (board->selection_x >= 0 &&
+             (unsigned int)board->selection_x < board->width)) &&
+           (board->selection_y == BOARD_NONSELECTED_IDX ||
+            (board->selection_y >= 0 &&
+             (unsigned int)board->selection_y < board->height)));
+
+    /* The selection coordinates should not be partially specified */
+    assert((board->selection_x == BOARD_NONSELECTED_IDX &&
+            board->selection_y == BOARD_NONSELECTED_IDX) ||
+           (board->selection_x != BOARD_NONSELECTED_IDX &&
+            board->selection_y != BOARD_NONSELECTED_IDX));
 }
 
 #endif /* BOARD_H_ */

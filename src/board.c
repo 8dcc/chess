@@ -37,11 +37,12 @@ static void set_board_cell(Board* board,
 /*----------------------------------------------------------------------------*/
 
 bool board_init(Board* board, size_t width, size_t height) {
-    board->cursor_x = 0;
-    board->cursor_y = 0;
-
-    board->width  = width;
-    board->height = height;
+    board->cursor_x    = 0;
+    board->cursor_y    = 0;
+    board->selection_x = BOARD_NONSELECTED_IDX;
+    board->selection_y = BOARD_NONSELECTED_IDX;
+    board->width       = width;
+    board->height      = height;
 
     board->cells  = malloc(board->width * board->height * sizeof(BoardCell));
     if (board->cells == NULL)
