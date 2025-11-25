@@ -84,8 +84,7 @@ static inline char board_cell_get_char(BoardCell* cell) {
  */
 static inline void board_assert_integrity(const Board* board) {
     /* The cursor coordinates should not be out of range */
-    assert(board->cursor_x >= 0 && board->cursor_x < board->width &&
-           board->cursor_y >= 0 && board->cursor_y < board->height);
+    assert(board->cursor_x < board->width && board->cursor_y < board->height);
 }
 
 #endif /* BOARD_H_ */
