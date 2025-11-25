@@ -205,26 +205,37 @@ bool render_board(const Board* board) {
 
     /* Initial border */
     for (size_t x = 0; x < board->width; x++)
-        addfmt_colored(RENDER_COL_BORDER, "+---");
-    addfmt_colored(RENDER_COL_BORDER, "+");
+        if (!addfmt_colored(RENDER_COL_BORDER, "+---"))
+            return false;
+    if (!addfmt_colored(RENDER_COL_BORDER, "+"))
+        return false;
 
     for (size_t y = 0; y < board->height; y++) {
         move(MARGIN_Y + 1 + (y * 2), MARGIN_X);
         /* Row pieces */
-        for (size_t x = 0; x < board->width; x++)
-            if (!addfmt_colored(RENDER_COL_BORDER, "|") ||
-                !addfmt_colored(RENDER_COL_PIECE,
-                                " %c ",
+        for (size_t x = 0; x < board->width; x++) {
+            if (!addfmt_colored(RENDER_COL_BORDER, "| "))
+                return false;
+
+            if (!addfmt_colored(RENDER_COL_PIECE,
+                                "%c",
                                 board_cell_get_char(
                                   &board->cells[board->width * y + x])))
                 return false;
-        addfmt_colored(RENDER_COL_BORDER, "|");
+
+            if (!addfmt_colored(RENDER_COL_BORDER, " "))
+                return false;
+        }
+        if (!addfmt_colored(RENDER_COL_BORDER, "|"))
+            return false;
 
         /* Border after each row */
         move(MARGIN_Y + 1 + (y * 2) + 1, MARGIN_X);
         for (size_t x = 0; x < board->width; x++)
-            addfmt_colored(RENDER_COL_BORDER, "+---");
-        addfmt_colored(RENDER_COL_BORDER, "+");
+            if (!addfmt_colored(RENDER_COL_BORDER, "+---"))
+                return false;
+        if (!addfmt_colored(RENDER_COL_BORDER, "+"))
+            return false;
     }
 
     /* After rendering, move terminal cursor to the player cursor */
