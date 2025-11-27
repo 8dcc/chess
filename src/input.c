@@ -81,33 +81,33 @@ enum EInputKey input_get_key(void) {
 bool input_process_game_key(Board* board, enum EInputKey input_key) {
     switch (input_key) {
         case INPUT_KEY_UP:
-            if (board->cursor_y > 0)
-                board->cursor_y--;
+            if (board->cursor.y > 0)
+                board->cursor.y--;
             break;
 
         case INPUT_KEY_DOWN:
-            if (board->cursor_y < board->height - 1)
-                board->cursor_y++;
+            if (board->cursor.y < board->height - 1)
+                board->cursor.y++;
             break;
 
         case INPUT_KEY_LEFT:
-            if (board->cursor_x > 0)
-                board->cursor_x--;
+            if (board->cursor.x > 0)
+                board->cursor.x--;
             break;
 
         case INPUT_KEY_RIGHT:
-            if (board->cursor_x < board->width - 1)
-                board->cursor_x++;
+            if (board->cursor.x < board->width - 1)
+                board->cursor.x++;
             break;
 
         case INPUT_KEY_SELECT:
-            if (board->selection_x == BOARD_NONSELECTED_IDX &&
-                board->selection_y == BOARD_NONSELECTED_IDX) {
-                board->selection_x = board->cursor_x;
-                board->selection_y = board->cursor_y;
+            if (board->selection.x == BOARD_ROW_NONE &&
+                board->selection.y == BOARD_COL_NONE) {
+                board->selection.x = board->cursor.x;
+                board->selection.y = board->cursor.y;
             } else {
-                board->selection_x = BOARD_NONSELECTED_IDX;
-                board->selection_y = BOARD_NONSELECTED_IDX;
+                board->selection.x = BOARD_ROW_NONE;
+                board->selection.y = BOARD_COL_NONE;
             }
             break;
 

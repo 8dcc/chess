@@ -211,31 +211,30 @@ bool render_board(const Board* board) {
     move(MARGIN_Y, MARGIN_X);
 
     /* Initial border */
-    for (size_t x = 0; x < board->width; x++)
+    for (int x = 0; x < board->width; x++)
         if (!addfmt_colored(RENDER_COL_BORDER, "+---"))
             return false;
     if (!addfmt_colored(RENDER_COL_BORDER, "+"))
         return false;
 
-    for (size_t y = 0; y < board->height; y++) {
+    for (int y = 0; y < board->height; y++) {
         move(MARGIN_Y + 1 + (y * 2), MARGIN_X);
         /* Row pieces */
-        for (size_t x = 0; x < board->width; x++) {
+        for (int x = 0; x < board->width; x++) {
             if (!addfmt_colored(RENDER_COL_BORDER, "| "))
                 return false;
 
             const enum ERenderColors piece_color =
-              (board->selection_x != BOARD_NONSELECTED_IDX &&
-               board->selection_y != BOARD_NONSELECTED_IDX &&
-               x == (unsigned int)board->selection_x &&
-               y == (unsigned int)board->selection_y)
+              (board->selection.x != BOARD_ROW_NONE &&
+               board->selection.y != BOARD_COL_NONE &&
+               x == board->selection.x && y == board->selection.y)
                 ? RENDER_COL_SELECTION
                 : RENDER_COL_PIECE;
 
-            if (!addfmt_colored(piece_color,
-                                "%c",
-                                board_cell_get_char(
-                                  &board->cells[board->width * y + x])))
+            const BoardCoordinate coord = { .x = x, .y = y };
+            const char piece_char =
+              board_cell_get_char(board_cell_at(board, coord));
+            if (!addfmt_colored(piece_color, "%c", piece_char))
                 return false;
 
             if (!addfmt_colored(RENDER_COL_BORDER, " "))
@@ -246,7 +245,7 @@ bool render_board(const Board* board) {
 
         /* Border after each row */
         move(MARGIN_Y + 1 + (y * 2) + 1, MARGIN_X);
-        for (size_t x = 0; x < board->width; x++)
+        for (int x = 0; x < board->width; x++)
             if (!addfmt_colored(RENDER_COL_BORDER, "+---"))
                 return false;
         if (!addfmt_colored(RENDER_COL_BORDER, "+"))
@@ -254,8 +253,8 @@ bool render_board(const Board* board) {
     }
 
     /* After rendering, move terminal cursor to the player cursor */
-    move(MARGIN_Y + (STRLEN("+|") * board->cursor_y) + 1,
-         MARGIN_X + (STRLEN("+---") * board->cursor_x) + 2);
+    move(MARGIN_Y + (STRLEN("+|") * board->cursor.y) + 1,
+         MARGIN_X + (STRLEN("+---") * board->cursor.x) + 2);
 
     refresh();
     return true;

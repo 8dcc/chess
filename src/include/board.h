@@ -26,10 +26,38 @@
 #include "piece.h"
 
 /*
- * Index value used in 'Board.selection_x' and 'Board.selection_y' to specify
- * that there is no selected cell in the board.
+ * Structure representing a coordinate in the board. The enumerations for the X
+ * and Y members contain the standard names for rows and columns in a chess
+ * board, which will be used for accesing the 'cells' member of the 'Board'
+ * structure.
+ *
+ * The 'NONE' values are used in 'Board.selection' to specify that there is no
+ * selected cell in the board.
  */
-#define BOARD_NONSELECTED_IDX (-1)
+typedef struct BoardCoordinate {
+    enum {
+        BOARD_ROW_NONE = -1,
+        BOARD_ROW_A    = 0,
+        BOARD_ROW_B    = 1,
+        BOARD_ROW_C    = 2,
+        BOARD_ROW_D    = 3,
+        BOARD_ROW_E    = 4,
+        BOARD_ROW_F    = 5,
+        BOARD_ROW_G    = 6,
+        BOARD_ROW_H    = 7,
+    } x;
+    enum {
+        BOARD_COL_NONE = -1,
+        BOARD_COL_1    = 0,
+        BOARD_COL_2    = 1,
+        BOARD_COL_3    = 2,
+        BOARD_COL_4    = 3,
+        BOARD_COL_5    = 4,
+        BOARD_COL_6    = 5,
+        BOARD_COL_7    = 6,
+        BOARD_COL_8    = 7,
+    } y;
+} BoardCoordinate;
 
 /*
  * Structure representing a single cell of a chess board, independently on
@@ -37,6 +65,10 @@
  */
 typedef struct BoardCell {
     bool has_piece;
+
+    /*
+     * TODO: Perhaps use a pointer, which is moved around when the pieces move.
+     */
     Piece piece;
 } BoardCell;
 
@@ -46,16 +78,21 @@ typedef struct BoardCell {
  */
 typedef struct Board {
     /* Width and height of the board, in cells */
-    unsigned int width, height;
+    int width, height;
 
-    /* Array of board cells */
+    /*
+     * 2D array of board cells. The array size is determined by the 'width' and
+     * 'height' members. The stored orientation always haves the white pieces
+     * (rows 1-2) on top, and the black pieces (rows 7-8) on the bottom; the
+     * board will be rotated when rendering, if needed.
+     */
     BoardCell* cells;
 
     /* Position of the player cursor, in cells */
-    unsigned int cursor_x, cursor_y;
+    BoardCoordinate cursor;
 
     /* Position of the player selection, in cells */
-    int selection_x, selection_y;
+    BoardCoordinate selection;
 } Board;
 
 /*----------------------------------------------------------------------------*/
@@ -81,6 +118,15 @@ void board_destroy(Board* board);
 bool board_set_initial_layout(Board* board);
 
 /*
+ * Return a pointer to the piece at the specified position in the specified
+ * board.
+ */
+static inline BoardCell* board_cell_at(const Board* board,
+                                       BoardCoordinate coord) {
+    return &board->cells[board->width * coord.y + coord.x];
+}
+
+/*
  * Get the character used to display a cell of a chess board.
  */
 static inline char board_cell_get_char(BoardCell* cell) {
@@ -93,21 +139,19 @@ static inline char board_cell_get_char(BoardCell* cell) {
  */
 static inline void board_assert_integrity(const Board* board) {
     /* The cursor coordinates should not be out of range */
-    assert(board->cursor_x < board->width && board->cursor_y < board->height);
+    assert(board->cursor.x < board->width && board->cursor.y < board->height);
 
     /* The selection coordinates should not be out of range */
-    assert((board->selection_x == BOARD_NONSELECTED_IDX ||
-            (board->selection_x >= 0 &&
-             (unsigned int)board->selection_x < board->width)) &&
-           (board->selection_y == BOARD_NONSELECTED_IDX ||
-            (board->selection_y >= 0 &&
-             (unsigned int)board->selection_y < board->height)));
+    assert((board->selection.x == BOARD_ROW_NONE ||
+            (board->selection.x >= 0 && board->selection.x < board->width)) &&
+           (board->selection.y == BOARD_COL_NONE ||
+            (board->selection.y >= 0 && board->selection.y < board->height)));
 
     /* The selection coordinates should not be partially specified */
-    assert((board->selection_x == BOARD_NONSELECTED_IDX &&
-            board->selection_y == BOARD_NONSELECTED_IDX) ||
-           (board->selection_x != BOARD_NONSELECTED_IDX &&
-            board->selection_y != BOARD_NONSELECTED_IDX));
+    assert((board->selection.x == BOARD_ROW_NONE &&
+            board->selection.y == BOARD_COL_NONE) ||
+           (board->selection.x != BOARD_ROW_NONE &&
+            board->selection.y != BOARD_COL_NONE));
 }
 
 #endif /* BOARD_H_ */

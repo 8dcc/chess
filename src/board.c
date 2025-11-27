@@ -23,34 +23,32 @@
 #include "include/board.h"
 #include "include/piece.h"
 
-static void set_board_cell(Board* board,
-                           size_t x,
-                           size_t y,
-                           enum EPieceType type,
-                           enum EPieceColor color) {
-    BoardCell* cell   = &board->cells[board->width * y + x];
-    cell->has_piece   = true;
-    cell->piece.type  = type;
-    cell->piece.color = color;
+static void set_board_cell(Board* board, size_t x, size_t y,
+                           enum EPieceType type, enum EPieceColor color) {
+    BoardCoordinate coord = { .x = x, .y = y };
+    BoardCell* cell       = board_cell_at(board, coord);
+    cell->has_piece       = true;
+    cell->piece.type      = type;
+    cell->piece.color     = color;
 }
 
 /*----------------------------------------------------------------------------*/
 
 bool board_init(Board* board, size_t width, size_t height) {
-    board->cursor_x    = 0;
-    board->cursor_y    = 0;
-    board->selection_x = BOARD_NONSELECTED_IDX;
-    board->selection_y = BOARD_NONSELECTED_IDX;
+    board->cursor.x    = 0;
+    board->cursor.y    = 0;
+    board->selection.x = BOARD_ROW_NONE;
+    board->selection.y = BOARD_COL_NONE;
     board->width       = width;
     board->height      = height;
 
-    board->cells  = malloc(board->width * board->height * sizeof(BoardCell));
+    board->cells = malloc(board->width * board->height * sizeof(BoardCell));
     if (board->cells == NULL)
         return false;
 
-    for (size_t y = 0; y < board->height; y++)
-        for (size_t x = 0; x < board->width; x++)
-            board->cells[board->width * y + x].has_piece = false;
+    for (int y = 0; y < board->height; y++)
+        for (int x = 0; x < board->width; x++)
+            board_cell_at(board, (BoardCoordinate){ x, y })->has_piece = false;
 
     return true;
 }
@@ -79,7 +77,7 @@ bool board_set_initial_layout(Board* board) {
     set_board_cell(board, 3, y, PIECE_TYPE_QUEEN, PIECE_COL_BLACK);
     set_board_cell(board, 4, y, PIECE_TYPE_KING, PIECE_COL_BLACK);
     y = 1;
-    for (size_t x = 0; x < board->width; x++)
+    for (int x = 0; x < board->width; x++)
         set_board_cell(board, x, y, PIECE_TYPE_PAWN, PIECE_COL_BLACK);
 
     /* White pieces, bottom of the board */
@@ -93,7 +91,7 @@ bool board_set_initial_layout(Board* board) {
     set_board_cell(board, 3, y, PIECE_TYPE_QUEEN, PIECE_COL_WHITE);
     set_board_cell(board, 4, y, PIECE_TYPE_KING, PIECE_COL_WHITE);
     y = board->height - 2;
-    for (size_t x = 0; x < board->width; x++)
+    for (int x = 0; x < board->width; x++)
         set_board_cell(board, x, y, PIECE_TYPE_PAWN, PIECE_COL_WHITE);
 
     return true;
