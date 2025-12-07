@@ -37,8 +37,8 @@ static void set_board_cell(Board* board, size_t x, size_t y,
 bool board_init(Board* board, size_t width, size_t height) {
     board->cursor.x    = 0;
     board->cursor.y    = 0;
-    board->selection.x = BOARD_ROW_NONE;
-    board->selection.y = BOARD_COL_NONE;
+    board->selection.x = BOARD_COL_NONE;
+    board->selection.y = BOARD_ROW_NONE;
     board->width       = width;
     board->height      = height;
 

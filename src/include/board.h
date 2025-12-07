@@ -36,26 +36,26 @@
  */
 typedef struct BoardCoordinate {
     enum {
-        BOARD_ROW_NONE = -1,
-        BOARD_ROW_A    = 0,
-        BOARD_ROW_B    = 1,
-        BOARD_ROW_C    = 2,
-        BOARD_ROW_D    = 3,
-        BOARD_ROW_E    = 4,
-        BOARD_ROW_F    = 5,
-        BOARD_ROW_G    = 6,
-        BOARD_ROW_H    = 7,
+        BOARD_COL_NONE = -1,
+        BOARD_COL_A    = 0,
+        BOARD_COL_B    = 1,
+        BOARD_COL_C    = 2,
+        BOARD_COL_D    = 3,
+        BOARD_COL_E    = 4,
+        BOARD_COL_F    = 5,
+        BOARD_COL_G    = 6,
+        BOARD_COL_H    = 7,
     } x;
     enum {
-        BOARD_COL_NONE = -1,
-        BOARD_COL_1    = 0,
-        BOARD_COL_2    = 1,
-        BOARD_COL_3    = 2,
-        BOARD_COL_4    = 3,
-        BOARD_COL_5    = 4,
-        BOARD_COL_6    = 5,
-        BOARD_COL_7    = 6,
-        BOARD_COL_8    = 7,
+        BOARD_ROW_NONE = -1,
+        BOARD_ROW_1    = 0,
+        BOARD_ROW_2    = 1,
+        BOARD_ROW_3    = 2,
+        BOARD_ROW_4    = 3,
+        BOARD_ROW_5    = 4,
+        BOARD_ROW_6    = 5,
+        BOARD_ROW_7    = 6,
+        BOARD_ROW_8    = 7,
     } y;
 } BoardCoordinate;
 
@@ -142,16 +142,16 @@ static inline void board_assert_integrity(const Board* board) {
     assert(board->cursor.x < board->width && board->cursor.y < board->height);
 
     /* The selection coordinates should not be out of range */
-    assert((board->selection.x == BOARD_ROW_NONE ||
+    assert((board->selection.x == BOARD_COL_NONE ||
             (board->selection.x >= 0 && board->selection.x < board->width)) &&
-           (board->selection.y == BOARD_COL_NONE ||
+           (board->selection.y == BOARD_ROW_NONE ||
             (board->selection.y >= 0 && board->selection.y < board->height)));
 
     /* The selection coordinates should not be partially specified */
-    assert((board->selection.x == BOARD_ROW_NONE &&
-            board->selection.y == BOARD_COL_NONE) ||
-           (board->selection.x != BOARD_ROW_NONE &&
-            board->selection.y != BOARD_COL_NONE));
+    assert((board->selection.x == BOARD_COL_NONE &&
+            board->selection.y == BOARD_ROW_NONE) ||
+           (board->selection.x != BOARD_COL_NONE &&
+            board->selection.y != BOARD_ROW_NONE));
 }
 
 #endif /* BOARD_H_ */

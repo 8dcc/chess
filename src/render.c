@@ -225,8 +225,8 @@ bool render_board(const Board* board) {
                 return false;
 
             const enum ERenderColors piece_color =
-              (board->selection.x != BOARD_ROW_NONE &&
-               board->selection.y != BOARD_COL_NONE &&
+              (board->selection.x != BOARD_COL_NONE &&
+               board->selection.y != BOARD_ROW_NONE &&
                x == board->selection.x && y == board->selection.y)
                 ? RENDER_COL_SELECTION
                 : RENDER_COL_PIECE;

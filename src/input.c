@@ -101,13 +101,13 @@ bool input_process_game_key(Board* board, enum EInputKey input_key) {
             break;
 
         case INPUT_KEY_SELECT:
-            if (board->selection.x == BOARD_ROW_NONE &&
-                board->selection.y == BOARD_COL_NONE) {
+            if (board->selection.x == BOARD_COL_NONE &&
+                board->selection.y == BOARD_ROW_NONE) {
                 board->selection.x = board->cursor.x;
                 board->selection.y = board->cursor.y;
             } else {
-                board->selection.x = BOARD_ROW_NONE;
-                board->selection.y = BOARD_COL_NONE;
+                board->selection.x = BOARD_COL_NONE;
+                board->selection.y = BOARD_ROW_NONE;
             }
             break;
 
