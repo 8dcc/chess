@@ -28,8 +28,11 @@
 /*
  * Structure representing a coordinate in the board. The enumerations for the X
  * and Y members contain the standard names for rows and columns in a chess
- * board, which will be used for accesing the 'cells' member of the 'Board'
- * structure.
+ * board, and their values correspond to the actual indexes that can be used for
+ * accesing the 'cells' member of the 'Board' structure.
+ *
+ * Note that the first stored column in the 'cells' array is the 8th in
+ * algebraic notation.
  *
  * The 'NONE' values are used in 'Board.selection' to specify that there is no
  * selected cell in the board.
@@ -48,14 +51,14 @@ typedef struct BoardCoordinate {
     } x;
     enum {
         BOARD_ROW_NONE = -1,
-        BOARD_ROW_1    = 0,
-        BOARD_ROW_2    = 1,
-        BOARD_ROW_3    = 2,
-        BOARD_ROW_4    = 3,
-        BOARD_ROW_5    = 4,
-        BOARD_ROW_6    = 5,
-        BOARD_ROW_7    = 6,
-        BOARD_ROW_8    = 7,
+        BOARD_ROW_8    = 0,
+        BOARD_ROW_7    = 1,
+        BOARD_ROW_6    = 2,
+        BOARD_ROW_5    = 3,
+        BOARD_ROW_4    = 4,
+        BOARD_ROW_3    = 5,
+        BOARD_ROW_2    = 6,
+        BOARD_ROW_1    = 7,
     } y;
 } BoardCoordinate;
 
@@ -68,6 +71,7 @@ typedef struct BoardCell {
 
     /*
      * TODO: Perhaps use a pointer, which is moved around when the pieces move.
+     * The pointer could be set to NULL, to replace the 'has_piece' member.
      */
     Piece piece;
 } BoardCell;
@@ -82,8 +86,8 @@ typedef struct Board {
 
     /*
      * 2D array of board cells. The array size is determined by the 'width' and
-     * 'height' members. The stored orientation always haves the white pieces
-     * (rows 1-2) on top, and the black pieces (rows 7-8) on the bottom; the
+     * 'height' members. The stored orientation always haves the black pieces
+     * (rows 7-8) on top, and the white pieces (rows 1-2) on the bottom; the
      * board will be rotated when rendering, if needed.
      */
     BoardCell* cells;
@@ -117,8 +121,10 @@ void board_destroy(Board* board);
  */
 bool board_set_initial_layout(Board* board);
 
+/*----------------------------------------------------------------------------*/
+
 /*
- * Return a pointer to the piece at the specified position in the specified
+ * Return a pointer to the cell at the specified position in the specified
  * board.
  */
 static inline BoardCell* board_cell_at(const Board* board,

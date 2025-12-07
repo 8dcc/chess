@@ -64,33 +64,33 @@ bool board_set_initial_layout(Board* board) {
     /* TODO: Support arbitrary board dimensions */
     assert(board->width == 8 && board->height == 8);
 
-    size_t y;
+    int y;
 
     /* Black pieces, top of the board */
-    y = 0;
-    set_board_cell(board, 0, y, PIECE_TYPE_ROOK, PIECE_COL_BLACK);
-    set_board_cell(board, 7, y, PIECE_TYPE_ROOK, PIECE_COL_BLACK);
-    set_board_cell(board, 1, y, PIECE_TYPE_KNIGHT, PIECE_COL_BLACK);
-    set_board_cell(board, 6, y, PIECE_TYPE_KNIGHT, PIECE_COL_BLACK);
-    set_board_cell(board, 2, y, PIECE_TYPE_BISHOP, PIECE_COL_BLACK);
-    set_board_cell(board, 5, y, PIECE_TYPE_BISHOP, PIECE_COL_BLACK);
-    set_board_cell(board, 3, y, PIECE_TYPE_QUEEN, PIECE_COL_BLACK);
-    set_board_cell(board, 4, y, PIECE_TYPE_KING, PIECE_COL_BLACK);
-    y = 1;
+    y = BOARD_ROW_8;
+    set_board_cell(board, BOARD_COL_A, y, PIECE_TYPE_ROOK, PIECE_COL_BLACK);
+    set_board_cell(board, BOARD_COL_B, y, PIECE_TYPE_KNIGHT, PIECE_COL_BLACK);
+    set_board_cell(board, BOARD_COL_C, y, PIECE_TYPE_BISHOP, PIECE_COL_BLACK);
+    set_board_cell(board, BOARD_COL_D, y, PIECE_TYPE_QUEEN, PIECE_COL_BLACK);
+    set_board_cell(board, BOARD_COL_E, y, PIECE_TYPE_KING, PIECE_COL_BLACK);
+    set_board_cell(board, BOARD_COL_F, y, PIECE_TYPE_BISHOP, PIECE_COL_BLACK);
+    set_board_cell(board, BOARD_COL_G, y, PIECE_TYPE_KNIGHT, PIECE_COL_BLACK);
+    set_board_cell(board, BOARD_COL_H, y, PIECE_TYPE_ROOK, PIECE_COL_BLACK);
+    y = BOARD_ROW_7;
     for (int x = 0; x < board->width; x++)
         set_board_cell(board, x, y, PIECE_TYPE_PAWN, PIECE_COL_BLACK);
 
     /* White pieces, bottom of the board */
-    y = board->height - 1;
-    set_board_cell(board, 0, y, PIECE_TYPE_ROOK, PIECE_COL_WHITE);
-    set_board_cell(board, 7, y, PIECE_TYPE_ROOK, PIECE_COL_WHITE);
-    set_board_cell(board, 1, y, PIECE_TYPE_KNIGHT, PIECE_COL_WHITE);
-    set_board_cell(board, 6, y, PIECE_TYPE_KNIGHT, PIECE_COL_WHITE);
-    set_board_cell(board, 2, y, PIECE_TYPE_BISHOP, PIECE_COL_WHITE);
-    set_board_cell(board, 5, y, PIECE_TYPE_BISHOP, PIECE_COL_WHITE);
-    set_board_cell(board, 3, y, PIECE_TYPE_QUEEN, PIECE_COL_WHITE);
-    set_board_cell(board, 4, y, PIECE_TYPE_KING, PIECE_COL_WHITE);
-    y = board->height - 2;
+    y = BOARD_ROW_1;
+    set_board_cell(board, BOARD_COL_A, y, PIECE_TYPE_ROOK, PIECE_COL_WHITE);
+    set_board_cell(board, BOARD_COL_B, y, PIECE_TYPE_KNIGHT, PIECE_COL_WHITE);
+    set_board_cell(board, BOARD_COL_C, y, PIECE_TYPE_BISHOP, PIECE_COL_WHITE);
+    set_board_cell(board, BOARD_COL_D, y, PIECE_TYPE_QUEEN, PIECE_COL_WHITE);
+    set_board_cell(board, BOARD_COL_E, y, PIECE_TYPE_KING, PIECE_COL_WHITE);
+    set_board_cell(board, BOARD_COL_F, y, PIECE_TYPE_BISHOP, PIECE_COL_WHITE);
+    set_board_cell(board, BOARD_COL_G, y, PIECE_TYPE_KNIGHT, PIECE_COL_WHITE);
+    set_board_cell(board, BOARD_COL_H, y, PIECE_TYPE_ROOK, PIECE_COL_WHITE);
+    y = BOARD_ROW_2;
     for (int x = 0; x < board->width; x++)
         set_board_cell(board, x, y, PIECE_TYPE_PAWN, PIECE_COL_WHITE);
 
